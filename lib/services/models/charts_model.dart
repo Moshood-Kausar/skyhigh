@@ -28,6 +28,16 @@ class ChartsModel {
   double sales;
   String orderDate;
 
+  DateTime parseDate() {
+    return DateTime(
+      int.parse(
+        orderDate.length == 10
+            ? orderDate.substring(6, 9)
+            : orderDate.substring(5, 8),
+      ),
+    );
+  }
+
   ChartsModel(
       {required this.orderID,
       required this.profit,
@@ -52,28 +62,28 @@ class ChartsModel {
       required this.orderDate});
 
   factory ChartsModel.fromJson(Map<String, dynamic> json) => ChartsModel(
-     orderID: json['Order ID'],
-      profit: double.parse(json['Profit']),
-      city: json['City'],
-      customerName: json['Customer Name'],
-      productName: json['Product Name'],
-      rowID: json['Row ID'],
-      country: json['Country'],
-      discount: double.parse(json['Discount']),
-      customerID: json['Customer ID'],
-      region: json['Region'],
-      quantity: int.parse(json['Quantity']),
-      segment: json['Segment'],
-      state: json['State'],
-      shipMode: json['Ship Mode'],
-      subCategory: json['Sub-Category'],
-      postalCode: json['Postal Code'],
-      shipDate: json['Ship Date'],
-      category: json['Category'],
-      productID: json['Product ID'],
-      sales: double.parse(json['Sales']),
-      orderDate: json['Order Date'],
-  );
+        orderID: json['Order ID'],
+        profit: double.parse(json['Profit']),
+        city: json['City'],
+        customerName: json['Customer Name'],
+        productName: json['Product Name'],
+        rowID: json['Row ID'],
+        country: json['Country'],
+        discount: double.parse(json['Discount']),
+        customerID: json['Customer ID'],
+        region: json['Region'],
+        quantity: int.parse(json['Quantity']),
+        segment: json['Segment'],
+        state: json['State'],
+        shipMode: json['Ship Mode'],
+        subCategory: json['Sub-Category'],
+        postalCode: json['Postal Code'],
+        shipDate: json['Ship Date'],
+        category: json['Category'],
+        productID: json['Product ID'],
+        sales: double.parse(json['Sales']),
+        orderDate: json['Order Date'],
+      );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();

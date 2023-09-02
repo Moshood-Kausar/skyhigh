@@ -3,11 +3,14 @@
 import 'dart:developer';
 
 import 'package:dartz/dartz.dart' hide State;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:skyhigh/services/api_sevices.dart';
 import 'package:skyhigh/services/base_api.dart';
 import 'package:skyhigh/services/models/charts_model.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 class ChartScreen extends StatefulWidget {
   const ChartScreen({super.key});
@@ -18,6 +21,9 @@ class ChartScreen extends StatefulWidget {
 
 class _ChartScreenState extends State<ChartScreen> {
   Charts _selectedChartType = Charts.bar;
+  USState state = USState.Alabama;
+  Segment segment = Segment.consumer;
+  Category category = Category.furniture;
   @override
   void initState() {
     super.initState();
@@ -47,6 +53,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     children: [
                       Flexible(
                         child: DropdownButtonFormField(
+                          value: state,
                           items: USState.values
                               .map((e) => DropdownMenuItem(
                                     value: e,
@@ -56,7 +63,9 @@ class _ChartScreenState extends State<ChartScreen> {
                                     ),
                                   ))
                               .toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) => context
+                              .read<ChartProvider>()
+                              .filterByState(value ?? USState.Alabama),
                         ),
                       ),
                       const SizedBox(
@@ -64,6 +73,7 @@ class _ChartScreenState extends State<ChartScreen> {
                       ),
                       Flexible(
                         child: DropdownButtonFormField(
+                          value: category,
                           items: Category.values
                               .map((e) => DropdownMenuItem(
                                     value: e,
@@ -73,7 +83,9 @@ class _ChartScreenState extends State<ChartScreen> {
                                     ),
                                   ))
                               .toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) => context
+                              .read<ChartProvider>()
+                              .filterByCategory(value ?? Category.furniture),
                         ),
                       ),
                       const SizedBox(
@@ -81,6 +93,7 @@ class _ChartScreenState extends State<ChartScreen> {
                       ),
                       Flexible(
                         child: DropdownButtonFormField(
+                          value: segment,
                           items: Segment.values
                               .map((e) => DropdownMenuItem(
                                     value: e,
@@ -90,7 +103,9 @@ class _ChartScreenState extends State<ChartScreen> {
                                     ),
                                   ))
                               .toList(),
-                          onChanged: (value) {},
+                          onChanged: (value) => context
+                              .read<ChartProvider>()
+                              .filterBySegment(value ?? Segment.consumer),
                         ),
                       ),
                     ],
@@ -99,27 +114,102 @@ class _ChartScreenState extends State<ChartScreen> {
                     height: 20,
                   ),
                   SegmentedButton<Charts>(
-                    on
+                    onSelectionChanged: (p0) => setState(() {
+                      _selectedChartType = p0.first;
+                    }),
                     segments: const <ButtonSegment<Charts>>[
                       ButtonSegment<Charts>(
                         value: Charts.bar,
-                        label: Text('BAR'),
+                        label: Text(
+                          'BAR',
+                          style: TextStyle(fontSize: 10),
+                        ),
                       ),
                       ButtonSegment<Charts>(
                         value: Charts.pie,
-                        label: Text('PIE'),
+                        label: Text(
+                          'PIE',
+                          style: TextStyle(fontSize: 10),
+                        ),
                       ),
                       ButtonSegment<Charts>(
                         value: Charts.composite,
-                        label: Text('COMPOSITE'),
+                        label: Text(
+                          'COMPOSITE',
+                          style: TextStyle(fontSize: 10),
+                        ),
                       ),
                       ButtonSegment<Charts>(
                         value: Charts.timeSeries,
-                        label: Text('TIME SERIES'),
+                        label: Text(
+                          'TIME SERIES',
+                          style: TextStyle(fontSize: 10),
+                        ),
                       ),
                     ],
                     selected: <Charts>{_selectedChartType},
                   ),
+                  const SizedBox(height: 20),
+                  if (_selectedChartType == Charts.bar)
+                    SizedBox(
+                      child: SfCartesianChart(
+                        primaryXAxis: CategoryAxis(),
+                        primaryYAxis: NumericAxis(),
+                        tooltipBehavior: TooltipBehavior(enable: true),
+                        series: [
+                          BarSeries<ChartsModel, String>(
+                              dataSource: value.filteredTimeSeries,
+                              xValueMapper: (ChartsModel data, _) =>
+                                  data.orderDate,
+                              yValueMapper: (ChartsModel data, _) =>
+                                  data.sales),
+                        ],
+                      ),
+                    ),
+                  if (_selectedChartType == Charts.pie)
+                    SizedBox(
+                      child: SfCircularChart(
+                        series: [
+                          DoughnutSeries<ChartsModel, String>(
+                            // pointColorMapper:(datum, index) => Colors.red,
+                            dataSource: value.filteredTimeSeries,
+                            xValueMapper: (datum, index) => datum.orderDate,
+                            yValueMapper: (datum, index) => datum.sales,
+                          )
+                        ],
+                      ),
+                    ),
+                  if (_selectedChartType == Charts.composite)
+                    SizedBox(
+                      child: SfCartesianChart(
+                        primaryXAxis: CategoryAxis(),
+                        series: <StackedBarSeries<ChartsModel, String>>[
+                          StackedBarSeries(
+                            dataSource: value.filteredTimeSeries,
+                            xValueMapper: (datum, index) => datum.orderDate,
+                            yValueMapper: (datum, index) => datum.sales,
+                          ),
+                          StackedBarSeries(
+                            dataSource: value.filteredTimeSeries,
+                            xValueMapper: (datum, index) => datum.shipDate,
+                            yValueMapper: (datum, index) => datum.sales,
+                          ),
+                        ],
+                      ),
+                    ),
+                  if (_selectedChartType == Charts.timeSeries)
+                    SizedBox(
+                      child: SfCartesianChart(
+                        primaryXAxis: DateTimeAxis(),
+                        series: <ChartSeries>[
+                          LineSeries<ChartsModel, DateTime>(
+                            dataSource: value.filteredTimeSeries,
+                            xValueMapper: (datum, index) => datum.parseDate(),
+                            yValueMapper: (datum, index) => datum.sales,
+                          )
+                        ],
+                      ),
+                    )
                 ],
               );
             }
@@ -215,7 +305,11 @@ enum Charts {
 
 class ChartProvider extends ChangeNotifier {
   States states = States.loading;
-  List<ChartsModel> timeseries = [];
+  List<ChartsModel> _timeseries = [];
+  List<ChartsModel> filteredTimeSeries = [];
+  USState state = USState.Alabama;
+  Segment segment = Segment.consumer;
+  Category category = Category.furniture;
 
   final api = ApiService();
 
@@ -228,15 +322,49 @@ class ChartProvider extends ChangeNotifier {
       },
       (r) {
         states = States.success;
-        timeseries = r;
+        _timeseries = r;
+        filteredTimeSeries = r
+            .where((element) =>
+                element.state == state.name &&
+                element.category == category.value &&
+                element.segment == segment.value)
+            .toList();
         log(r.toString(), name: 'response');
         notifyListeners();
       },
     );
   }
 
-  List<ChartsModel> filterTimeSeries(
-      {USState? state, Segment? segment, Category? category}) {
-    return [];
+  filterByState(USState filterState) {
+    state = filterState;
+    filteredTimeSeries = _timeseries
+        .where((element) =>
+            element.state == state.name &&
+            element.category == category.value &&
+            element.segment == segment.value)
+        .toList();
+    notifyListeners();
+  }
+
+  filterBySegment(Segment filterSegment) {
+    segment = filterSegment;
+    filteredTimeSeries = _timeseries
+        .where((element) =>
+            element.state == state.name &&
+            element.category == category.value &&
+            element.segment == segment.value)
+        .toList();
+    notifyListeners();
+  }
+
+  filterByCategory(Category filterCategory) {
+    category = filterCategory;
+    filteredTimeSeries = _timeseries
+        .where((element) =>
+            element.state == state.name &&
+            element.category == category.value &&
+            element.segment == segment.value)
+        .toList();
+    notifyListeners();
   }
 }
