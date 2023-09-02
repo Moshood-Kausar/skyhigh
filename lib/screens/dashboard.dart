@@ -1,6 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:skyhigh/screens/charts.dart';
+import 'package:skyhigh/screens/lat_long.dart';
 import 'package:skyhigh/screens/map_screen.dart';
+import 'package:skyhigh/screens/search_location.dart';
 
 class DashBoard extends StatefulWidget {
   const DashBoard({super.key});
@@ -11,10 +16,13 @@ class DashBoard extends StatefulWidget {
 
 class _DashBoardState extends State<DashBoard> {
   final List<Widget> screens = [
-    const Charts(),
-    const MapsScreens(),
+    const ChartScreen(),
+    (SearchLocation()),
   ];
+
+  Position? userLocation;
   int currentIndex = 0;
+  bool loading = true;
 
   @override
   Widget build(BuildContext context) {

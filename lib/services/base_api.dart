@@ -1,7 +1,8 @@
 
+import 'package:dartz/dartz.dart';
 import 'package:skyhigh/services/models/charts_model.dart';
 
 abstract class BaseApi {
-  Future<ChartsModel>chartApi();
+  Future<Either<String , List<ChartsModel>>>chartApi();
  
 }

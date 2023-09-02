@@ -1,102 +1,103 @@
-
 import 'dart:convert';
 
-ChartsModel chartsModelFromJson(String str) => ChartsModel.fromJson(json.decode(str));
+ChartsModel chartsModelFromJson(String str) =>
+    ChartsModel.fromJson(json.decode(str));
 
 String chartsModelToJson(ChartsModel data) => json.encode(data.toJson());
+
 class ChartsModel {
-  String? orderID;
-  String? profit;
-  String? city;
-  String? customerName;
-  String? productName;
-  String? rowID;
-  String? country;
-  String? discount;
-  String? customerID;
-  String? region;
-  String? quantity;
-  String? segment;
-  String? state;
-  String? shipMode;
-  String? subCategory;
-  String? postalCode;
-  String? shipDate;
-  String? category;
-  String? productID;
-  String? sales;
-  String? orderDate;
+  String orderID;
+  double profit;
+  String city;
+  String customerName;
+  String productName;
+  String rowID;
+  String country;
+  double discount;
+  String customerID;
+  String region;
+  int quantity;
+  String segment;
+  String state;
+  String shipMode;
+  String subCategory;
+  String postalCode;
+  String shipDate;
+  String category;
+  String productID;
+  double sales;
+  String orderDate;
 
   ChartsModel(
-      {this.orderID,
-      this.profit,
-      this.city,
-      this.customerName,
-      this.productName,
-      this.rowID,
-      this.country,
-      this.discount,
-      this.customerID,
-      this.region,
-      this.quantity,
-      this.segment,
-      this.state,
-      this.shipMode,
-      this.subCategory,
-      this.postalCode,
-      this.shipDate,
-      this.category,
-      this.productID,
-      this.sales,
-      this.orderDate});
+      {required this.orderID,
+      required this.profit,
+      required this.city,
+      required this.customerName,
+      required this.productName,
+      required this.rowID,
+      required this.country,
+      required this.discount,
+      required this.customerID,
+      required this.region,
+      required this.quantity,
+      required this.segment,
+      required this.state,
+      required this.shipMode,
+      required this.subCategory,
+      required this.postalCode,
+      required this.shipDate,
+      required this.category,
+      required this.productID,
+      required this.sales,
+      required this.orderDate});
 
-  ChartsModel.fromJson(Map<String, dynamic> json) {
-    orderID = json['Order ID'];
-    profit = json['Profit'];
-    city = json['City'];
-    customerName = json['Customer Name'];
-    productName = json['Product Name'];
-    rowID = json['Row ID'];
-    country = json['Country'];
-    discount = json['Discount'];
-    customerID = json['Customer ID'];
-    region = json['Region'];
-    quantity = json['Quantity'];
-    segment = json['Segment'];
-    state = json['State'];
-    shipMode = json['Ship Mode'];
-    subCategory = json['Sub-Category'];
-    postalCode = json['Postal Code'];
-    shipDate = json['Ship Date'];
-    category = json['Category'];
-    productID = json['Product ID'];
-    sales = json['Sales'];
-    orderDate = json['Order Date'];
-  }
+  factory ChartsModel.fromJson(Map<String, dynamic> json) => ChartsModel(
+     orderID: json['Order ID'],
+      profit: double.parse(json['Profit']),
+      city: json['City'],
+      customerName: json['Customer Name'],
+      productName: json['Product Name'],
+      rowID: json['Row ID'],
+      country: json['Country'],
+      discount: double.parse(json['Discount']),
+      customerID: json['Customer ID'],
+      region: json['Region'],
+      quantity: int.parse(json['Quantity']),
+      segment: json['Segment'],
+      state: json['State'],
+      shipMode: json['Ship Mode'],
+      subCategory: json['Sub-Category'],
+      postalCode: json['Postal Code'],
+      shipDate: json['Ship Date'],
+      category: json['Category'],
+      productID: json['Product ID'],
+      sales: double.parse(json['Sales']),
+      orderDate: json['Order Date'],
+  );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Order ID'] = this.orderID;
-    data['Profit'] = this.profit;
-    data['City'] = this.city;
-    data['Customer Name'] = this.customerName;
-    data['Product Name'] = this.productName;
-    data['Row ID'] = this.rowID;
-    data['Country'] = this.country;
-    data['Discount'] = this.discount;
-    data['Customer ID'] = this.customerID;
-    data['Region'] = this.region;
-    data['Quantity'] = this.quantity;
-    data['Segment'] = this.segment;
-    data['State'] = this.state;
-    data['Ship Mode'] = this.shipMode;
-    data['Sub-Category'] = this.subCategory;
-    data['Postal Code'] = this.postalCode;
-    data['Ship Date'] = this.shipDate;
-    data['Category'] = this.category;
-    data['Product ID'] = this.productID;
-    data['Sales'] = this.sales;
-    data['Order Date'] = this.orderDate;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['Order ID'] = orderID;
+    data['Profit'] = profit;
+    data['City'] = city;
+    data['Customer Name'] = customerName;
+    data['Product Name'] = productName;
+    data['Row ID'] = rowID;
+    data['Country'] = country;
+    data['Discount'] = discount;
+    data['Customer ID'] = customerID;
+    data['Region'] = region;
+    data['Quantity'] = quantity;
+    data['Segment'] = segment;
+    data['State'] = state;
+    data['Ship Mode'] = shipMode;
+    data['Sub-Category'] = subCategory;
+    data['Postal Code'] = postalCode;
+    data['Ship Date'] = shipDate;
+    data['Category'] = category;
+    data['Product ID'] = productID;
+    data['Sales'] = sales;
+    data['Order Date'] = orderDate;
     return data;
   }
 }

@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:skyhigh/screens/map_screen.dart';
 
 class SearchLocation extends StatefulWidget {
-  const SearchLocation({super.key});
+ 
+  const SearchLocation({Key? key, }) : super(key: key);
 
   @override
   State<SearchLocation> createState() => _SearchLocationState();
@@ -17,26 +20,6 @@ class _SearchLocationState extends State<SearchLocation> {
   LatLng? userLocation;
   final TextEditingController _searchController = TextEditingController();
   final List<PlacePrediction> _predictions = [];
-  void getUserLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
-      setState(() {
-        userLocation = LatLng(position.latitude, position.longitude);
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  @override
-  void initState() {
-    getUserLocation();
-    // TODO: implement initState
-    super.initState();
-    
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +56,14 @@ class _SearchLocationState extends State<SearchLocation> {
                 return ListTile(
                   title: Text(_predictions[index].description),
                   onTap: () {
+                   
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MapsScreens()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MapsScreens(
+                        ),
+                      ),
+                    );
                   },
                 );
               },
@@ -100,7 +87,7 @@ class _SearchLocationState extends State<SearchLocation> {
       if (data['status'] == 'OK') {
         final predictions = data['predictions'] as List<dynamic>;
         setState(() {
-          _predictions.clear();
+          //_predictions.clear();
           for (var prediction in predictions) {
             _predictions.add(PlacePrediction.fromJson(prediction));
           }
