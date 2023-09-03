@@ -1,16 +1,12 @@
-# skyhigh
+# SKYHIGH
 
-A new Flutter project.
+Creating a mobile application with the Flutter Framework involves initiating a POST request to one of the designated SkyHigh API endpoints. This API responds with sales data spanning the past four years in JSON format. The application is designed to visualize this data through various chart types, including bar charts, pie charts, composite bar charts, time series charts, and tables. Additionally, users of the app have the capability to apply filters to specific columns, enabling them to extract valuable insights that will inform the forthcoming marketing promotion for the business.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## LINK TO DOWNLOAD APK OUTPUT ON DRIVE
+[Download apk](https://drive.google.com/file/d/1RcJ3CErkzEkTFV0CEfpYWCo6rjWzN-pP/view?usp=sharing)
 
-A few resources to get you started if this is your first Flutter project:
+## LINK TO APK OUTPUT ON APPETIZE.IO
+[Appetize Link](https://appetize.io/app/5u4ifpdbmsvrdotd72fhz3s4eq)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
